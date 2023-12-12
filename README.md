@@ -1,3 +1,4 @@
+adapt DGDM for satellite nowcasting
 # DGDM : Deterministic Guidance Diffusion Model for Probabilistic Weather Forecasting
 
 Welcome to the official repository for the **[Deterministic Guidance Diffusion Model for Probabilistic Weather Forecasting](https://arxiv.org/abs/2312.02819)**
