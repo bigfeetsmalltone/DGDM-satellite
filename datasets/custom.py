@@ -11,6 +11,7 @@ from PIL import Image
 
 from datasets.mmnist import MovingMNIST
 from datasets.typhoon import TLoader
+from datasets.satellite import Satellite
 
 @Registers.datasets.register_with_name('custom_aligned')
 class CustomAlignedDataset(Dataset):
@@ -26,6 +27,10 @@ class CustomAlignedDataset(Dataset):
             path = dataset_config.dataset_path \
                 if self.is_train else dataset_config.valset_path
             self.images = TLoader(is_train=self.is_train, path=path)
+        elif dataset_config.dataset == "satellite":
+            path = dataset_config.dataset_path \
+                if self.is_train else dataset_config.valset_path
+            self.images = Satellite(path, 16, self.is_train)
         else:
             raise NotImplementedError
         

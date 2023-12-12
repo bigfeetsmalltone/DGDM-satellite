@@ -60,7 +60,7 @@ class BaseRunner(ABC):
         train_set, valid_set, test_set = get_dataset(self.config.data, True)
         self.train_loader = DataLoader(train_set, 
                                     batch_size=self.config.data.train.batch_size,
-                                    num_workers=4,
+                                    num_workers=1,
                                     drop_last=True,
                                     )
         self.val_loader = DataLoader(valid_set, 

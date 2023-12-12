@@ -11,6 +11,10 @@ def extract(a, t, x_shape, per_frame=False):
         return out.reshape(b, *((1,) * (len(x_shape) - 1)))
 
 def default(val, d):
-    if exists(val):
+    # if exists(val):
+    #     return val
+    # print(val.shape)
+    if val is None:
+        return d() if isfunction(d) else d
+    else:
         return val
-    return d() if isfunction(d) else d

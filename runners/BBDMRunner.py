@@ -98,8 +98,8 @@ class BBDMRunner(BaseRunner):
         # save images
         sample = net.sample(x_cond, clip_denoised=self.config.testing.clip_denoised)
         sample, prediction = sample[0], sample[1]
-        
-        channels = ['ir105', 'sw038', 'wv063']
+        # channels = ['ir105', 'sw038', 'wv063']
+        channels = ['gray']
         for z, channel in enumerate(channels):
             x_conds = x_cond[0,:, z:z+1]
             x_split = x[0,:, z:z+1]

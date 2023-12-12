@@ -179,9 +179,10 @@ class Determinisitic(nn.Module):
         self.out_frames = out_frames
         self.enc = Encoder(C, hid_S, N_S)
         self.hid = Predictor(T*hid_S, hid_T, N_T)
-        self.dec = Decoder(hid_S, C, N_S, out_frames)
+        # self.dec = Decoder(hid_S, C, N_S, out_frames)
+        self.dec = Decoder(hid_S, C, N_S, T)
 
-    def forward(self, x_raw):
+    def one_forward_step(self, x_raw):
         B, T, C, H, W = x_raw.shape
         x = x_raw.view(B*T, C, H, W)
         embed, skip = self.enc(x)
@@ -192,5 +193,23 @@ class Determinisitic(nn.Module):
         feature = rearrange(feature, 'b t c h w -> b c t h w')
         hid = hid.reshape(B*T, C_, H_, W_)
         Y = self.dec(hid, skip) # B T H W
-        Y = rearrange(Y, 'b (t c) h w -> b t c h w', t=self.out_frames)
+        # print(Y.shape)
+        # exit(0)
+        # Y = rearrange(Y, 'b (t c) h w -> b t c h w', t=self.out_frames)
+        Y = rearrange(Y, 'b (t c) h w -> b t c h w', t=T)
         return Y, feature
+
+    def forward(self, x_raw):
+        cnt = 1
+        pred_y = []
+        pred_feature = []
+        temp = x_raw
+        # print(temp.shape)
+        for i in range(cnt):
+            temp, feature = self.one_forward_step(temp)
+            pred_y.append(temp)
+            pred_feature.append(feature)
+        pred_y = torch.cat(pred_y, 1)
+        pred_feature = torch.cat(pred_feature, 2)
+        # print('test for python', pred_y.shape, pred_feature.shape)
+        return pred_y, pred_feature
